@@ -1,0 +1,26 @@
+org: thiagorm
+service: api-alumnos-rds
+
+provider:
+  name: aws
+  runtime: python3.13
+  memorySize: 1024
+  timeout: 20
+  region: us-east-1
+  iam:
+    role: arn:aws:iam::406642386657:role/LabRole
+  environment:
+    SECRET_NAME: nuevaDBalumnos
+
+functions:
+  listar:
+    handler: ListarAlumnos.lambda_handler
+    package:
+      include:
+        - ./**
+    events:
+      - http:
+          path: /alumnos/listar
+          method: get
+          cors: true
+          integration: lambda
